@@ -1,0 +1,77 @@
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Полная высота экрана */
+}
+
+/* Стили для верхней панели */
+.top-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ddd;
+    transition: background-color 0.3s;
+}
+
+.tab-button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.tab-button:hover {
+    background-color: #bbb;
+}
+
+/* Стили для кнопки добавления точек */
+#add-point-toggle {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #28a745; /* Зелёный цвет */
+    color: white;
+    transition: background-color 0.3s;
+}
+
+#add-point-toggle.active {
+    background-color: #dc3545; /* Красный цвет */
+}
+
+/* Стили для контейнера карты */
+#map {
+    flex-grow: 1; /* Занимает всё оставшееся пространство */
+}
+
+/* Стили для кастомной иконки */
+.red-dot-icon {
+    background-color: red; /* Цвет точки */
+    border-radius: 50%; /* Круглая форма */
+    width: 6px; /* Ширина */
+    height: 6px; /* Высота */
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* Добавляем тень для видимости */
+}

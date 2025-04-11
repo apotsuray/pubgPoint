@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pubg Map</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <!-- Верхняя панель -->
+    <div class="top-panel">
+        <!-- Вкладки для выбора острова -->
+        <div class="tabs">
+            <button class="tab-button active" data-island="erangel" data-id="1">Erangel</button>
+            <button class="tab-button" data-island="miramar" data-id="2">Miramar</button>
+            <button class="tab-button" data-island="vikendi" data-id="3">Vikendi</button>
+            <button class="tab-button" data-island="rondo" data-id="4">Rondo</button>
+            <button class="tab-button" data-island="taego" data-id="5">Taego</button>
+            <button class="tab-button" data-island="deston" data-id="6">Deston</button>
+        </div>
+
+        <!-- Кнопка для включения/отключения режима добавления точек -->
+        <button id="add-point-toggle">Включить добавление точек</button>
+    </div>
+
+    <!-- Контейнер для карты -->
+    <div id="map"></div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="/js/script.js"></script>
+</body>
+</html>

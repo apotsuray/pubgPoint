@@ -22,12 +22,37 @@
             <button class="tab-button" data-island="deston" data-id="6">Deston</button>
         </div>
 
-        <!-- Кнопка для включения/отключения режима добавления точек -->
-        <button id="add-point-toggle">Включить добавление точек</button>
+        <!-- Кнопки для управления -->
+        <div class="controls">
+            <button id="add-point-toggle">Включить добавление точек</button>
+            <button id="edit-point-toggle">Включить редактирование точек</button>
+        </div>
     </div>
 
     <!-- Контейнер для карты -->
     <div id="map"></div>
+
+    <!-- Панель для редактирования точек -->
+    <div id="edit-panel" class="hidden">
+        <h3>Редактирование точки</h3>
+        <form id="edit-point-form">
+            <label for="edit-xCoord">X Координата:</label>
+            <input type="number" id="edit-xCoord" name="xCoord" required><br>
+
+            <label for="edit-yCoord">Y Координата:</label>
+            <input type="number" id="edit-yCoord" name="yCoord" required><br>
+
+            <label for="edit-baseRating">Рейтинг:</label>
+            <input type="number" id="edit-baseRating" name="baseRating" required><br>
+
+            <label for="edit-description">Описание:</label>
+            <textarea id="edit-description" name="description" required></textarea><br>
+
+            <button type="submit">Сохранить</button>
+            <button type="button" id="delete-point">Удалить точку</button>
+            <button type="button" id="close-edit-panel">Закрыть</button>
+        </form>
+    </div>
 </div>
 
 <!-- Leaflet JS -->

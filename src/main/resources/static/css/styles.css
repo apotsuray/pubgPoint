@@ -46,7 +46,12 @@ body {
     background-color: #bbb;
 }
 
-/* Стили для кнопки добавления точек */
+/* Стили для кнопок управления */
+.controls {
+    display: flex;
+    gap: 10px;
+}
+
 #add-point-toggle {
     padding: 10px 20px;
     font-size: 16px;
@@ -62,6 +67,21 @@ body {
     background-color: #dc3545; /* Красный цвет */
 }
 
+#edit-point-toggle {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ffc107; /* Жёлтый цвет */
+    color: white;
+    transition: background-color 0.3s;
+}
+
+#edit-point-toggle.active {
+    background-color: #e0a800; /* Темно-жёлтый цвет */
+}
+
 /* Стили для контейнера карты */
 #map {
     flex-grow: 1; /* Занимает всё оставшееся пространство */
@@ -74,4 +94,65 @@ body {
     width: 6px; /* Ширина */
     height: 6px; /* Высота */
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* Добавляем тень для видимости */
+}
+
+/* Стили для панели редактирования */
+#edit-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 1000;
+}
+
+#edit-panel.hidden {
+    display: none;
+}
+
+#edit-panel h3 {
+    margin-top: 0;
+}
+
+#edit-panel form {
+    display: flex;
+    flex-direction: column;
+}
+
+#edit-panel label {
+    margin-top: 10px;
+}
+
+#edit-panel input,
+#edit-panel textarea {
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#edit-panel button {
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#edit-panel button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+}
+
+#edit-panel #delete-point {
+    background-color: #dc3545;
+    color: white;
+}
+
+#edit-panel #close-edit-panel {
+    background-color: #6c757d;
+    color: white;
 }

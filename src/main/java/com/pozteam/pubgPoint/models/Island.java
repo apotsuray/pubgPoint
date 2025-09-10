@@ -18,6 +18,9 @@ public class Island {
     @OneToMany(mappedBy = "island", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Point> points;
+    @OneToMany(mappedBy = "island",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<SecretRoom> secretRooms;
     public Island() {
 
     }
@@ -48,5 +51,17 @@ public class Island {
 
     public void setPoints(List<Point> points) {
         this.points = points;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<SecretRoom> getSecretRooms() {
+        return secretRooms;
+    }
+
+    public void setSecretRooms(List<SecretRoom> secretRooms) {
+        this.secretRooms = secretRooms;
     }
 }

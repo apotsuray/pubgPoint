@@ -156,3 +156,17 @@ body {
     background-color: #6c757d;
     color: white;
 }
+#add-secret-room-toggle {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #17a2b8; /* Голубой цвет */
+    color: white;
+    transition: background-color 0.3s;
+}
+
+#add-secret-room-toggle.active {
+    background-color: #138496; /* Темно-голубой цвет */
+}

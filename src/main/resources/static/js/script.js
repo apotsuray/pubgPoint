@@ -3,6 +3,7 @@ const tabButtons = document.querySelectorAll('.tab-button');
 const mapContainer = document.getElementById('map');
 const addPointToggle = document.getElementById('add-point-toggle');
 const editPointToggle = document.getElementById('edit-point-toggle');
+const addSecretRoomToggle = document.getElementById('add-secret-room-toggle'); // Новая кнопка
 const editPanel = document.getElementById('edit-panel');
 const editForm = document.getElementById('edit-point-form');
 const deleteButton = document.getElementById('delete-point');
@@ -11,8 +12,10 @@ const closeEditPanelButton = document.getElementById('close-edit-panel');
 let currentIslandId = 1; // ID текущего острова
 let isAddingPoints = false; // Флаг для режима добавления точек
 let isEditingPoints = false; // Флаг для режима редактирования точек
+let isAddingSecretRooms = false; // Флаг для режима добавления секретных комнат
 let map; // Объект карты Leaflet
 let markers = []; // Массив для хранения маркеров
+let secretRoomMarkers = []; // Массив для хранения маркеров секретных комнат
 let selectedMarker = null; // Выбранный маркер
 
 // Настройки карты
@@ -55,17 +58,30 @@ const mapSettings = {
     }
 };
 
-// Создание кастомной иконки для маркеров
+// Создание кастомной иконки для маркеров точек
 const redDotIcon = L.divIcon({
     className: 'red-dot-icon',
     iconSize: [6, 6],
     iconAnchor: [3, 3]
 });
 
+// Создание иконки ключа для секретных комнат
+const keyIcon = L.divIcon({
+    html: '<i class="fas fa-key" style="color: gold; font-size: 16px;"></i>',
+    iconSize: [1, 1], // Размер иконки
+    iconAnchor: [1, 1] // Центр иконки
+});
+
 // Функция для очистки маркеров
 function clearMarkers() {
     markers.forEach(marker => marker.remove());
     markers = [];
+}
+
+// Функция для очистки маркеров секретных комнат
+function clearSecretRoomMarkers() {
+    secretRoomMarkers.forEach(marker => marker.remove());
+    secretRoomMarkers = [];
 }
 
 // Функция для загрузки точек
@@ -87,6 +103,25 @@ async function loadPoints(islandId) {
             if (isEditingPoints) {
                 marker.on('click', () => openEditPanel(marker));
             }
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Функция для загрузки секретных комнат
+async function loadSecretRooms(islandId) {
+    try {
+        const response = await fetch(`/api/secret-room/island/${islandId}`);
+        if (!response.ok) throw new Error('Ошибка загрузки секретных комнат');
+
+        const secretRooms = await response.json();
+        clearSecretRoomMarkers();
+
+        secretRooms.forEach(room => {
+            const marker = L.marker([room.yCoord, room.xCoord], { icon: keyIcon }).addTo(map);
+            marker.bindPopup('Секретная комната');
+            secretRoomMarkers.push(marker);
         });
     } catch (error) {
         console.error(error);
@@ -195,6 +230,7 @@ function initMap(islandName) {
 
     L.imageOverlay(settings.imageUrl, settings.imageBounds).addTo(map);
     loadPoints(currentIslandId);
+    loadSecretRooms(currentIslandId); // Загрузка секретных комнат
 }
 
 // Обработчик кликов на вкладки
@@ -209,11 +245,20 @@ tabButtons.forEach(button => {
     });
 });
 
-// Обработчик клика на карте для добавления точки
+// Обработчик клика на карте для добавления точки или секретной комнаты
 mapContainer.addEventListener('click', (event) => {
     if (!map) return;
     const latlng = map.mouseEventToLatLng(event);
-    addPoint({ latlng });
+
+    // Если включен режим добавления точек
+    if (isAddingPoints) {
+        addPoint({ latlng });
+    }
+
+    // Если включен режим добавления секретных комнат
+    if (isAddingSecretRooms) {
+        addSecretRoom({ latlng });
+    }
 });
 
 // Функция для добавления точки на карту
@@ -237,6 +282,7 @@ function addPoint(event) {
             xCoord: xCoord,
             yCoord: yCoord,
             baseRating: 5, // Пример значения рейтинга
+            description: 'Новая точка' // Пример описания
         })
     })
         .then(response => {
@@ -254,6 +300,43 @@ function addPoint(event) {
             if (isEditingPoints) {
                 marker.on('click', () => openEditPanel(marker));
             }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+// Функция для добавления секретной комнаты на карту
+function addSecretRoom(event) {
+    if (!isAddingSecretRooms) return;
+
+    const { latlng } = event;
+    const xCoord = latlng.lng;
+    const yCoord = latlng.lat;
+
+    console.log(`Добавлена секретная комната: x=${xCoord}, y=${yCoord}`);
+
+    // Отправляем запрос на сервер для создания секретной комнаты
+    fetch('/api/secret-room', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            island: { id: currentIslandId },
+            xCoord: xCoord,
+            yCoord: yCoord
+        })
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Ошибка добавления секретной комнаты');
+            return response.json();
+        })
+        .then(newSecretRoom => {
+            // Создаём маркер для новой секретной комнаты
+            const marker = L.marker([newSecretRoom.yCoord, newSecretRoom.xCoord], { icon: keyIcon }).addTo(map);
+            marker.bindPopup('Секретная комната');
+            secretRoomMarkers.push(marker);
         })
         .catch(error => {
             console.error(error);
@@ -285,6 +368,15 @@ editPointToggle.addEventListener('click', () => {
         });
         closeEditPanel(); // Закрываем панель редактирования, если она открыта
     }
+});
+
+// Обработчик переключения режима добавления секретных комнат
+addSecretRoomToggle.addEventListener('click', () => {
+    isAddingSecretRooms = !isAddingSecretRooms;
+    addSecretRoomToggle.textContent = isAddingSecretRooms
+        ? 'Отключить добавление секретных комнат'
+        : 'Включить добавление секретных комнат';
+    addSecretRoomToggle.classList.toggle('active');
 });
 
 // Инициализация карты при загрузке страницы

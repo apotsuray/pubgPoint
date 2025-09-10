@@ -16,9 +16,11 @@ public class IslandService {
     public IslandService(IslandRepository islandRepository) {
         this.islandRepository = islandRepository;
     }
+
     public List<Island> getAllIslands() {
         return islandRepository.findAll();
     }
+
     public Island getIslandById(Integer id) {
         return islandRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Карта не найдена с ID: " + id));
